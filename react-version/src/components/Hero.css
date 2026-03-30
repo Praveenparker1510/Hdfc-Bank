@@ -1,0 +1,128 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.6s ease;
+}
+
+.slide-1 { background: linear-gradient(135deg, var(--navy-dark) 0%, #004080 60%, #1a237e 100%); }
+.slide-2 { background: linear-gradient(135deg, #1a0a00 0%, #8B1a1a 50%, var(--red-dark) 100%); }
+.slide-3 { background: linear-gradient(135deg, #0a0a2e 0%, var(--navy) 50%, #1a237e 100%); }
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 60px;
+  padding: 70px 20px;
+  width: 100%;
+}
+
+.slide-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.9);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.slide-content h1 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.slide-content h1 em { color: #FFD700; font-style: italic; }
+
+.slide-content p {
+  font-size: 17px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 440px;
+}
+
+.slide-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn-primary {
+  background: var(--red);
+  color: var(--white);
+  padding: 13px 28px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: var(--transition);
+}
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(227,24,55,0.4); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--white);
+  padding: 13px 28px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  border: 2px solid rgba(255,255,255,0.4);
+  transition: var(--transition);
+}
+.btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+
+/* Phone Mockup */
+.phone-mockup {
+  background: #111;
+  border-radius: 36px;
+  padding: 20px;
+  width: 240px;
+  margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  border: 3px solid #333;
+}
+.phone-screen { background: #fff; border-radius: 24px; overflow: hidden; padding: 16px; }
+.app-header { background: var(--navy); color: white; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 12px; margin-bottom: 12px; }
+.app-balance { text-align: center; margin-bottom: 12px; }
+.bal-label { font-size: 10px; color: var(--gray-500); }
+.bal-amount { font-size: 20px; font-weight: 700; color: var(--navy); }
+.app-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.app-card { border-radius: 10px; padding: 10px 14px; color: white; font-size: 11px; font-weight: 600; display: flex; justify-content: space-between; }
+.app-card.red { background: var(--red); }
+.app-card.navy { background: var(--navy); }
+.app-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.app-act { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; background: var(--gray-50); border-radius: 8px; font-size: 10px; color: var(--gray-700); text-align: center; }
+
+/* House Card */
+.house-card { background: rgba(255,255,255,0.12); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 32px; color: white; max-width: 300px; margin: 0 auto; }
+.house-icon { font-size: 48px; margin-bottom: 16px; }
+.house-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.rate { font-size: 32px; font-weight: 800; color: #FFD700; margin-bottom: 16px; font-family: var(--font-display); }
+.house-features { display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: rgba(255,255,255,0.85); }
+
+/* Credit Card */
+.credit-card-mockup { background: linear-gradient(135deg, var(--navy), #1a3a6b); border-radius: 16px; padding: 28px; width: 280px; margin: 0 auto; box-shadow: 0 20px 60px rgba(0,0,0,0.4); position: relative; overflow: hidden; color: white; }
+.card-chip { width: 40px; height: 30px; background: linear-gradient(135deg, #d4a017, #f0c040); border-radius: 6px; margin-bottom: 24px; }
+.card-number { font-size: 16px; letter-spacing: 2px; margin-bottom: 20px; font-family: monospace; }
+.card-holder { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.8); }
+.card-brand { position: absolute; bottom: 24px; right: 24px; font-weight: 800; font-size: 18px; }
+
+/* Controls */
+.slide-controls { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; }
+.slide-btn { background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; transition: var(--transition); line-height: 1; }
+.slide-btn:hover { background: rgba(255,255,255,0.4); }
+.slide-dots { display: flex; gap: 8px; }
+.dot { width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: var(--transition); }
+.dot.active { background: var(--white); width: 24px; border-radius: 4px; }
+
+@media (max-width: 768px) {
+  .hero-inner { grid-template-columns: 1fr; padding: 50px 20px; }
+  .slide-visual { display: none; }
+  .slide-content h1 { font-size: 32px; }
+}
