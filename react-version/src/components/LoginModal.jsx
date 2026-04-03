@@ -1,11 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import VirtualKeyboard from "./VirtualKeyboard";
 import "./LoginModal.css";
+import "./LoginModalExtra.css";
 
-export default function LoginModal({ isOpen, onClose }) {
+function generateCaptcha() {
+  const num1 = Math.floor(Math.random() * 10) + 1;
+  const num2 = Math.floor(Math.random() * 10) + 1;
+  return { num1, num2, answer: (num1 + num2).toString() };
+}
+
+export default function LoginModal({ isOpen, onClose, onLogin }) {
   const [showPass, setShowPass] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [activeTab, setActiveTab] = useState("retail");
   const [status, setStatus] = useState("idle"); // idle | loading | success
-  const [form, setForm] = useState({ userId: "", password: "", remember: false });
+  const [form, setForm] = useState({ id: "", phone: "", password: "", captcha: "", remember: false });
+  const [captchaChallenge, setCaptchaChallenge] = useState(generateCaptcha());
+  const [captchaError, setCaptchaError] = useState(false);
+  
+  const passwordInputRef = useRef(null);
 
   useEffect(() => {
     const handler = (e) => { if (e.key === "Escape") onClose(); };
@@ -15,20 +28,46 @@ export default function LoginModal({ isOpen, onClose }) {
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
+    if (isOpen) {
+      setCaptchaChallenge(generateCaptcha());
+      setForm({ id: "", phone: "", password: "", captcha: "", remember: false });
+      setCaptchaError(false);
+      setShowKeyboard(false);
+    }
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (form.captcha !== captchaChallenge.answer) {
+      setCaptchaError(true);
+      setCaptchaChallenge(generateCaptcha());
+      setForm({...form, captcha: ""});
+      return;
+    }
+    setCaptchaError(false);
     setStatus("loading");
     setTimeout(() => {
       setStatus("success");
       setTimeout(() => {
-        onClose();
+        onLogin({ id: form.id || form.phone || "User", password: form.password });
         setStatus("idle");
-        setForm({ userId: "", password: "", remember: false });
       }, 1800);
     }, 1500);
+  };
+
+  const handleKeyboardPress = (char) => {
+    setForm(prev => ({ ...prev, password: prev.password + char }));
+    if (passwordInputRef.current) {
+        passwordInputRef.current.focus();
+    }
+  };
+
+  const handleKeyboardBackspace = () => {
+    setForm(prev => ({ ...prev, password: prev.password.slice(0, -1) }));
+    if (passwordInputRef.current) {
+        passwordInputRef.current.focus();
+    }
   };
 
   if (!isOpen) return null;
@@ -50,7 +89,7 @@ export default function LoginModal({ isOpen, onClose }) {
           <div className="modal-features">
             {[
               "256-bit SSL encryption",
-              "Two-factor authentication",
+              "Virtual Keyboard Protection",
               "24/7 fraud monitoring",
             ].map((f) => (
               <div key={f} className="mf">
@@ -69,6 +108,7 @@ export default function LoginModal({ isOpen, onClose }) {
             {["retail", "corporate"].map((tab) => (
               <button
                 key={tab}
+                type="button"
                 className={`ltab${activeTab === tab ? " active" : ""}`}
                 onClick={() => setActiveTab(tab)}
               >
@@ -79,30 +119,66 @@ export default function LoginModal({ isOpen, onClose }) {
 
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>Customer ID / User ID</label>
+              <label>Username</label>
               <input
                 type="text"
-                placeholder={activeTab === "retail" ? "Enter your Customer ID" : "Enter Corporate User ID"}
-                value={form.userId}
-                onChange={(e) => setForm({ ...form, userId: e.target.value })}
-                required
+                placeholder={activeTab === "retail" ? "Enter Username" : "Enter Corporate ID"}
+                value={form.id}
+                onChange={(e) => setForm({ ...form, id: e.target.value })}
+                required={!form.phone}
               />
             </div>
 
             <div className="form-group">
-              <label>IPIN / Password</label>
+              <label>Registered Phone Number</label>
+              <input
+                type="tel"
+                placeholder="Enter 10-digit Phone Number"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                required={!form.id}
+              />
+            </div>
+
+            <div className="form-group" style={{position: 'relative'}}>
+              <label>Password</label>
               <div className="password-wrap">
                 <input
+                  ref={passwordInputRef}
                   type={showPass ? "text" : "password"}
-                  placeholder="Enter your IPIN"
+                  placeholder="Enter your Password"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   required
                 />
+                <button type="button" className="toggle-pass vk-btn" style={{marginRight: '8px', fontSize: '18px'}} onClick={() => setShowKeyboard(!showKeyboard)} title="Virtual Keyboard">
+                  ⌨️
+                </button>
                 <button type="button" className="toggle-pass" onClick={() => setShowPass(!showPass)}>
                   {showPass ? "🙈" : "👁️"}
                 </button>
               </div>
+              <VirtualKeyboard 
+                isVisible={showKeyboard} 
+                onClose={() => setShowKeyboard(false)} 
+                onKeyPress={handleKeyboardPress} 
+                onBackspace={handleKeyboardBackspace}
+              />
+            </div>
+
+            <div className="form-group captcha-group">
+                <label>Security Check</label>
+                <div className="captcha-wrap">
+                   <div className="captcha-box">{captchaChallenge.num1} + {captchaChallenge.num2} = ?</div>
+                   <input 
+                     type="text" 
+                     placeholder="Answer"
+                     value={form.captcha}
+                     onChange={(e) => setForm({ ...form, captcha: e.target.value })}
+                     required
+                   />
+                </div>
+                {captchaError && <span className="captcha-error">Incorrect answer. Try again.</span>}
             </div>
 
             <div className="form-row">
@@ -114,7 +190,7 @@ export default function LoginModal({ isOpen, onClose }) {
                 />
                 Remember me
               </label>
-              <a href="#" className="forgot">Forgot IPIN?</a>
+              <a href="#" className="forgot">Forgot Password?</a>
             </div>
 
             <button

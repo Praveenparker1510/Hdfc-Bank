@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 const navItems = ["Personal", "NRI", "Business", "Corporate", "SME", "Agri"];
-const subNavItems = ["Accounts", "Deposits", "Loans", "Cards", "Investments", "Insurance", "Forex", "Pay"];
+const subNavItems = ["Loans", "Cards", "Investments", "Insurance", "Forex", "Pay"];
 
-export default function Navbar({ onLoginClick }) {
+export default function Navbar({ user, onLoginClick }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -20,9 +21,8 @@ export default function Navbar({ onLoginClick }) {
       <div className="top-bar">
         <div className="container top-bar-inner">
           <div className="top-links">
-            {["Locate Us", "Contact Us", "Feedback", "Sitemap"].map(l => (
-              <a key={l} href="#">{l}</a>
-            ))}
+            <Link to="/locate-us">Locate Us</Link>
+            <Link to="/about">About Us</Link>
           </div>
           <div className="top-right">
             <span>📞 1800-202-6161</span>
@@ -35,7 +35,7 @@ export default function Navbar({ onLoginClick }) {
       <nav className={`navbar${scrolled ? " scrolled" : ""}`}>
         <div className="container navbar-inner">
           {/* Logo */}
-          <div className="logo">
+          <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
             <div className="logo-mark">
               <span className="logo-h">H</span>
               <span className="logo-dfc">DFC</span>
@@ -44,19 +44,25 @@ export default function Navbar({ onLoginClick }) {
               <span className="bank-name">BANK</span>
               <span className="tagline">We understand your world</span>
             </div>
-          </div>
+          </Link>
 
           {/* Nav Links */}
           <ul className={`nav-links${menuOpen ? " open" : ""}`}>
             {navItems.map(item => (
-              <li key={item}><a href="#">{item}</a></li>
+              <li key={item}><Link to={`/${item.toLowerCase()}`}>{item}</Link></li>
             ))}
           </ul>
 
           <div className="nav-actions">
-            <button className="btn-login" onClick={onLoginClick}>
-              🔒 Net Banking
-            </button>
+            {user ? (
+              <div className="user-avatar" title={user.id}>
+                {user.id.charAt(0).toUpperCase()}
+              </div>
+            ) : (
+              <button className="btn-login" onClick={onLoginClick}>
+                🔒 Login
+              </button>
+            )}
             <div
               className={`hamburger${menuOpen ? " active" : ""}`}
               onClick={() => setMenuOpen(!menuOpen)}
@@ -70,7 +76,7 @@ export default function Navbar({ onLoginClick }) {
         <div className="sub-nav">
           <div className="container sub-nav-inner">
             {subNavItems.map(item => (
-              <a key={item} href="#">{item}</a>
+              <Link key={item} to={`/${item.toLowerCase()}`}>{item}</Link>
             ))}
           </div>
         </div>

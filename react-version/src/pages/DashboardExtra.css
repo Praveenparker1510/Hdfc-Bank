@@ -1,0 +1,38 @@
+/* Existing styles... append these for the Quick Transfer functionality */
+
+.btn-transfer {
+  background: var(--navy);
+  color: var(--white);
+  border: 1px solid var(--navy);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-transfer:hover {
+  background: var(--navy-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.transfer-modal {
+  max-width: 500px !important;
+  width: 90% !important;
+  display: block !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.transfer-form .disabled-input {
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  cursor: not-allowed;
+  font-family: monospace;
+  font-size: 15px;
+  border: 1px solid var(--gray-200);
+}
+
+.transfer-form .disabled-input:focus {
+  border-color: var(--gray-200);
+  outline: none;
+}
